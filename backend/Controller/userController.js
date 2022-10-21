@@ -54,7 +54,7 @@ const loginUser = asynchandler(async (req, res) => {
   const user = await User.findOne({email})
 
   if(user && (await bcrypt.compare(password, user.password))) {
-     res.json({
+     res.status(201).json({
        _id: user.id,
        name: user.name,
        email: user.email,
@@ -70,7 +70,13 @@ const loginUser = asynchandler(async (req, res) => {
 
 //Get user
 const getUser = asynchandler(async (req, res) => {
-  res.json({message: "Register user"})
+  const {_id, name, email} = await User.findById(req.user.id)
+
+  res.status(200).json({
+    id: _id,
+    name,
+    email
+  })
 })
 
 module.exports = {
